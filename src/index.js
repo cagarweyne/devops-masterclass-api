@@ -1,21 +1,21 @@
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config({ path: "./.env" });
-const createCheckoutSession = require("./api//checkout");
-const webhook = require("./api/webhook");
-const paymentIntent = require("./api/paymentIntent");
-const decodeJWT = require("./auth/decodeJWT");
-const setupIntent = require("./api/setupIntent");
-const validateUser = require("./auth/validateUser");
-const getCards = require("./api/getPaymentMethod");
-const updatePaymentIntent = require("./api/updatePaymentIntent");
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config({ path: './.env' });
+const createCheckoutSession = require('./api//checkout');
+const webhook = require('./api/webhook');
+const paymentIntent = require('./api/paymentIntent');
+const decodeJWT = require('./auth/decodeJWT');
+const setupIntent = require('./api/setupIntent');
+const validateUser = require('./auth/validateUser');
+const getCards = require('./api/getPaymentMethod');
+const updatePaymentIntent = require('./api/updatePaymentIntent');
 
 const app = express();
 const port = 8080;
 
 app.use(
   express.json({
-    verify: (req, res, buffer) => (req["rawBody"] = buffer),
+    verify: (req, res, buffer) => (req['rawBody'] = buffer),
   })
 );
 
@@ -23,21 +23,20 @@ app.use(cors({ origin: true }));
 
 app.use(decodeJWT);
 
-app.get("/", (req, res) => {
-  console.log("process env", process.env);
-  return res.send("Hello World!");
+app.get('/', (req, res) => {
+  return res.send('Hello World!');
 });
 
-app.post("/create-checkout-session", createCheckoutSession);
+app.post('/create-checkout-session', createCheckoutSession);
 
-app.post("/create-payment-intent", paymentIntent);
+app.post('/create-payment-intent', paymentIntent);
 
-app.post("/save-payment-method", validateUser, setupIntent);
+app.post('/save-payment-method', validateUser, setupIntent);
 
-app.get("/get-payment-methods", validateUser, getCards);
+app.get('/get-payment-methods', validateUser, getCards);
 
-app.put("/update-payment-intent", validateUser, updatePaymentIntent);
+app.put('/update-payment-intent', validateUser, updatePaymentIntent);
 
-app.post("/webhook", webhook);
+app.post('/webhook', webhook);
 
-app.listen(port, () => console.log("server listening on port", port));
+app.listen(port, () => console.log('server listening on port', port));
